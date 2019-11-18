@@ -78,7 +78,10 @@ exports.signupUser = (req, res) => {
                                         lastname: response.lastname,
                                         birthdate: response.birthdate,
                                         email: response.email,
-                                        password: response.password
+                                        password: response.password,
+                                        request: {
+                                            type: 'POST'
+                                        }
                                     }
                                 })
                             })
@@ -116,7 +119,7 @@ exports.viewAllUsers = (req, res) => {
                         password: doc.password,
                         request: {
                             type: 'GET',
-                            url: 'http://localhost/api/users/' + doc._id
+                            url: 'http://localhost:3030/api/users/' + doc._id
                         }
                     }
                 })
@@ -145,7 +148,7 @@ exports.viewUser = (req, res) => {
                 password: response.password,
                 request: {
                     type: 'GET',
-                    from: 'http://localhost/api/users/'
+                    from: 'http://localhost:3030/api/users/'
                 }
             })
         })
@@ -177,7 +180,7 @@ exports.updateUser = (req, res) => {
     const id = req.params.id
     const updateOps = {}
     for (const ops of req.body) {
-        updateOps[ops.propName] = ops.Value
+        updateOps[ops.propName] = ops.value
     }
     User.update({ _id: id }, { $set: updateOps })
         .exec()

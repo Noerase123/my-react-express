@@ -15,17 +15,17 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Orders() {
+export default function Products() {
   const classes = useStyles();
   
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    const apiUrl = "http://localhost:3030/api/users"
+    const apiUrl = "http://localhost:3030/api/products"
     axios.get(apiUrl)
       .then(res => {
-        console.log(res.data.registered)
-        setUsers(res.data.registered)
+        console.log(res.data.data)
+        setUsers(res.data.data)
 
       })
       .catch(err => {
@@ -36,23 +36,23 @@ export default function Orders() {
 
   const usage = users.map(user => (
     <TableRow key={user._id}>
-      <TableCell>{user.firstname}</TableCell>
-      <TableCell>{user.lastname}</TableCell>
-      <TableCell>{user.birthdate}</TableCell>
-      <TableCell>{user.email}</TableCell>
+      <TableCell>{user.name}</TableCell>
+      <TableCell>{user.price}</TableCell>
+      <TableCell>{user.description}</TableCell>
+      <TableCell>{user.code}</TableCell>
     </TableRow>
   ))
 
   return (
     <React.Fragment>
-      <Title>Registered Users</Title>
+      <Title>Products</Title>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Firstname</TableCell>
-            <TableCell>Lastname</TableCell>
-            <TableCell>Birthdate</TableCell>
-            <TableCell>Email</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Price</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>Code</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -61,7 +61,7 @@ export default function Orders() {
       </Table>
       <div className={classes.seeMore}>
         <Link color="primary" href="javascript:;">
-          See more users
+          See more products
         </Link>
       </div>
     </React.Fragment>

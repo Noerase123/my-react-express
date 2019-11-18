@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const homeModel = require('../models/HomeModel')
 const registerRoute = require('./users')
+const productRoute = require('./products')
 
 router.get('/', (req,res) => {
     res.status(200).json({
@@ -25,6 +26,8 @@ router.get('/next', (req,res) => {
 router.get('/home', (req,res) => {
     res.status(200).json(homeModel)
 })
+
+router.use('/products', productRoute)
 
 
 router.use('/users', registerRoute)
