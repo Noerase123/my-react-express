@@ -15,13 +15,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Orders() {
+export default function Users() {
   const classes = useStyles();
   
   const [users, setUsers] = useState([])
 
   useEffect(() => {
-    const apiUrl = "http://localhost:3030/api/users"
+    const apiUrl = "http://localhost:3030/api/users/dashboard"
     axios.get(apiUrl)
       .then(res => {
         console.log(res.data.registered)

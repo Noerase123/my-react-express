@@ -12,6 +12,7 @@ import './css/index.css';
 import App from './App';
 import Dashboard from './components/Dashboard/Dashboard'
 import SignUp from './components/signup'
+import ProductsTab from './components/Dashboard/ProductsTab'
 
 function Routing() {
     return (
@@ -29,6 +30,9 @@ function Routing() {
                     </Route>
                     <Route path="/signup">
                         <SignUp />
+                    </Route>
+                    <Route path="/products">
+                        <ProductsTab />
                     </Route>
                 </Switch>
             </div>

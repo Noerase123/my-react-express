@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom'
 import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -12,6 +13,7 @@ const useStyles = makeStyles({
 
 export default function Deposits() {
   const classes = useStyles();
+  const history = useHistory()
   return (
     <React.Fragment>
       <Title>Recent Deposits</Title>
@@ -22,7 +24,7 @@ export default function Deposits() {
         on 15 March, 2019
       </Typography>
       <div>
-        <Link color="primary" href="javascript:;">
+        <Link color="primary" href="javascript:;" onClick={()=> history.push('/')}>
           View balance
         </Link>
       </div>

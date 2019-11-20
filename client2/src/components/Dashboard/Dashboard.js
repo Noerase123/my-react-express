@@ -1,12 +1,11 @@
-import React from 'react';
-import {useHistory} from 'react-router-dom'
+import React, { useState,useEffect } from 'react';
+import { useHistory } from 'react-router-dom'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,12 +20,19 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import Title from './Title';
 
-import { mainListItems, secondaryListItems } from './listItems';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+
+import ListItems from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import Orders from './Orders';
-import Products from './Products'
+import Users from './Users';
+import axios from 'axios'
 
 function Copyright() {
   return (
@@ -126,7 +132,7 @@ export default function Dashboard() {
   const classes = useStyles();
   const history = useHistory()
 
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -150,10 +156,34 @@ export default function Dashboard() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handlelogout = () => {
     history.push('/')
   }
+
+  const [users, setUsers] = useState([])
+
+  useEffect(() => {
+    const apiUrl = "http://localhost:3030/api/products/dashboard"
+    axios.get(apiUrl)
+      .then(res => {
+        console.log(res.data.data)
+        setUsers(res.data.data)
+
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, 1);
+
+  const products = users.map(user => (
+    <TableRow key={user._id}>
+      <TableCell>{user.name}</TableCell>
+      <TableCell>{user.price}</TableCell>
+      <TableCell>{user.description}</TableCell>
+      <TableCell>{user.code}</TableCell>
+    </TableRow>
+  ))
 
   return (
     <div className={classes.root}>
@@ -172,7 +202,7 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={() => console.log('notif')}>
             <Badge badgeContent={4} color="secondary">
               <NotificationsIcon />
             </Badge>
@@ -220,9 +250,7 @@ export default function Dashboard() {
           </IconButton>
         </div>
         <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
+        <ListItems />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -240,15 +268,34 @@ export default function Dashboard() {
                 <Deposits />
               </Paper>
             </Grid>
-            {/* Recent Orders */}
+            {/* Recent Users */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Orders />
+                <Users />
               </Paper>
             </Grid>
+            {/* Recent Products */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Products />
+                <Title>Products</Title>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Price</TableCell>
+                      <TableCell>Description</TableCell>
+                      <TableCell>Code</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {products ? products : 'No content available'}
+                  </TableBody>
+                </Table>
+                <div className={classes.seeMore}>
+                  <Link color="primary" href="javascript:;">
+                    See more products
+        </Link>
+                </div>
               </Paper>
             </Grid>
           </Grid>

@@ -61,6 +61,36 @@ exports.viewAllProducts = (req,res) => {
             })
 }
 
+exports.viewAllProductsInDashBoard = (req,res) => {
+    Product.find()
+            .limit(5)
+            .exec()
+            .then(response => {
+                const result = {
+                    count: response.length,
+                    data: response.map(prod => {
+                        return {
+                            _id: prod._id,
+                            name: prod.name,
+                            price: prod.price,
+                            description: prod.description,
+                            code: prod.code,
+                            request: {
+                                type: 'GET',
+                                url: 'http://localhost:3030/api/products/' + prod._id
+                            }
+                        }
+                    })
+                }
+                res.status(200).json(result)
+            })
+            .catch(err => {
+                res.status(500).json({
+                    message: err
+                })
+            })
+}
+
 exports.viewProduct = (req,res) => {
     const id = req.params.id
     Product.findById(id)

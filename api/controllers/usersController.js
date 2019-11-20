@@ -134,6 +134,38 @@ exports.viewAllUsers = (req, res) => {
         })
 }
 
+exports.viewAllUsersInDashboard = (req, res) => {
+    User.find()
+        .limit(5)
+        .exec()
+        .then(docs => {
+            const result = {
+                count: docs.length,
+                registered: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        firstname: doc.firstname,
+                        lastname: doc.lastname,
+                        birthdate: doc.birthdate,
+                        email: doc.email,
+                        password: doc.password,
+                        request: {
+                            type: 'GET',
+                            url: 'http://localhost:3030/api/users/' + doc._id
+                        }
+                    }
+                })
+            }
+            res.status(200).json(result)
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                error: err
+            })
+        })
+}
+
 exports.viewUser = (req, res) => {
     const id = req.params.id
     User.findById(id)

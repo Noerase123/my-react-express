@@ -10,6 +10,8 @@ router.post('/', usersController.signupUser)
 
 router.get('/', usersController.viewAllUsers)
 
+router.get('/dashboard', usersController.viewAllUsersInDashboard)
+
 router.get('/:id', usersController.viewUser)
 
 router.delete('/:id', usersController.deleteUser)
