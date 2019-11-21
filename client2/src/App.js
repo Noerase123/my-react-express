@@ -17,7 +17,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" href="#">
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -52,6 +52,9 @@ export default function App() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const [emailErr, setEmailErr] = useState('')
+  const [pwErr, setPwErr] = useState('')
+
   const history = useHistory()
 
   const handleSubmit = () => {
@@ -61,14 +64,22 @@ export default function App() {
       "email": email,
       "password": password
     }
-    axios.post(apiUrl + 'users/login', payload)
-      .then(response => {
-        console.log(response)
-        history.push('/home')
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if (email == "") {
+      setEmailErr("the email is empty")
+    }
+    else if (password == "") {
+      setPwErr("the password is empty")
+    }
+    else {
+      axios.post(apiUrl + 'users/login', payload)
+        .then(response => {
+          console.log(response)
+          history.push('/home')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 
   const handlesignup = () => {
@@ -90,6 +101,7 @@ export default function App() {
           margin="normal"
           required
           fullWidth
+          helperText={emailErr}
           id="email"
           label="Email Address"
           name="email"
@@ -102,6 +114,7 @@ export default function App() {
           margin="normal"
           required
           fullWidth
+          helperText={pwErr}
           name="password"
           label="Password"
           type="password"

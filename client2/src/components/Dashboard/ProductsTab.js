@@ -168,12 +168,7 @@ export default function ProductsTab() {
                     </IconButton>
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Products
-          </Typography>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
+                    </Typography>
                     <IconButton
                         aria-label="account of current user"
                         aria-controls="menu-appbar"

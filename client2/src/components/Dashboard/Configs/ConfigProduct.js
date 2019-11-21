@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -34,24 +34,28 @@ export default function ConfigProduct() {
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [desc, setDesc] = useState('')
+    const [inc, setInc] = useState('')
 
     const addProduct = () => {
         const url = 'http://localhost:3030/api/products/'
         const payload = {
             "name": name,
             "price": price,
-            "description" : desc,
-            "code" : cryptoRandomString({length: 10})
+            "description": desc,
+            "code": cryptoRandomString({ length: 10 })
         }
-        axios.post(url,payload)
-            .then(res => {
-                console.log(res.data)
-                alert(res.data.message)
-                history.push('/products')
-            })
-            .catch(err => {
-                console.log(err)
-            })
+        if (name == "" || price == "" || desc == "") {
+            setInc("You have incomplete form")
+        } else {
+            axios.post(url, payload)
+                .then(res => {
+                    console.log(res.data)
+                    window.location.reload()
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        }
     }
 
     return (
@@ -60,6 +64,8 @@ export default function ConfigProduct() {
                 <Typography variant="h5" gutterBottom>
                     Add Product
                 </Typography>
+
+                <h2 style={{color:"red"}}>{inc}</h2>
 
                 <TextField
                     id="standard-full-width"

@@ -3,6 +3,13 @@ const router = express.Router()
 const homeModel = require('../models/HomeModel')
 const registerRoute = require('./users')
 const productRoute = require('./products')
+const notifRoute = require('./notification')
+
+router.use('/products', productRoute)
+
+router.use('/users', registerRoute)
+
+router.use('/notif', notifRoute)
 
 router.get('/', (req,res) => {
     res.status(200).json({
@@ -11,26 +18,10 @@ router.get('/', (req,res) => {
     })
 })
 
-router.get('/next', (req,res) => {
-    const str = {
-        name: req.body.name,
-        age: req.body.age,
-        getName: () => {
-            return `Hello my name is ${str.name} ${str.age} year's old!`
-        } 
-    }
-    console.log(str.getName())
-    res.send(str.getName())
-})
-
 router.get('/home', (req,res) => {
     res.status(200).json(homeModel)
 })
 
-router.use('/products', productRoute)
-
-
-router.use('/users', registerRoute)
 
 
 module.exports = router

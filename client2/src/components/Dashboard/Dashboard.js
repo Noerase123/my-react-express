@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -128,11 +128,30 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+
 export default function Dashboard() {
   const classes = useStyles();
   const history = useHistory()
 
   const [open, setOpen] = React.useState(false);
+
+  const [users, setUsers] = useState([])
+  const [showNotif, setShowNotif] = useState([])
+
+  const [auth, setAuth] = useState(true);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const opened = Boolean(anchorEl);
+
+  const [notif, setNotif] = useState(null);
+  const openShow = Boolean(notif);
+
+  const handleOpenNotif = event => {
+    setNotif(event.currentTarget)
+  }
+  const handleCloseNotif = () => {
+    setNotif(null)
+  }
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -140,10 +159,6 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-
-  const [auth, setAuth] = React.useState(true);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const opened = Boolean(anchorEl);
 
   const handleChange = event => {
     setAuth(event.target.checked);
@@ -161,7 +176,6 @@ export default function Dashboard() {
     history.push('/')
   }
 
-  const [users, setUsers] = useState([])
 
   useEffect(() => {
     const apiUrl = "http://localhost:3030/api/products/dashboard"
@@ -169,6 +183,18 @@ export default function Dashboard() {
       .then(res => {
         console.log(res.data.data)
         setUsers(res.data.data)
+
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+    const notifUrl = "http://localhost:3030/api/notif"
+
+    axios.get(notifUrl)
+      .then(res => {
+        console.log(res.data.data)
+        setShowNotif(res.data.data)
 
       })
       .catch(err => {
@@ -183,6 +209,12 @@ export default function Dashboard() {
       <TableCell>{user.description}</TableCell>
       <TableCell>{user.code}</TableCell>
     </TableRow>
+  ))
+
+  const notificate = showNotif.map(notif => (
+    <div>
+      <MenuItem><b>{notif.title}</b></MenuItem>
+    </div>
   ))
 
   return (
@@ -202,11 +234,35 @@ export default function Dashboard() {
           <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
             Dashboard
           </Typography>
-          <IconButton color="inherit" onClick={() => console.log('notif')}>
-            <Badge badgeContent={4} color="secondary">
+          <IconButton
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleOpenNotif}
+            color="inherit"
+          >
+            <Badge badgeContent={notificate.length} color="secondary">
               <NotificationsIcon />
             </Badge>
           </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={notif}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={openShow}
+            onClose={handleCloseNotif}
+          >
+
+            {notificate ? notificate : 'No notification available'}
+          </Menu>
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
@@ -291,10 +347,10 @@ export default function Dashboard() {
                     {products ? products : 'No content available'}
                   </TableBody>
                 </Table>
-                <div className={classes.seeMore}>
-                  <Link color="primary" href="javascript:;">
+                <div className={classes.seeMore}><br/>
+                  <Link color="primary" href="/products">
                     See more products
-        </Link>
+                  </Link>
                 </div>
               </Paper>
             </Grid>

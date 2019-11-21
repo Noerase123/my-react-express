@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,6 +8,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Title from './Title';
 import axios from 'axios'
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 const useStyles = makeStyles(theme => ({
   seeMore: {
@@ -36,13 +38,23 @@ export default function Products() {
 
   const prodDelete = (prodid) => {
     const apiUrl = "http://localhost:3030/api/products/"
-    axios.delete(apiUrl+ prodid)
-      .then(res => {
-        console.log(res)
-        console.log(res.data)
-        if (window.confirm('Are you sure?')) {
-          window.location.reload()
-        }
+    if (window.confirm('Are you sure?')) {
+      axios.delete(apiUrl + prodid)
+        .then(res => {
+          console.log(res)
+          console.log(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }
+
+  const prodView = (prodid) => {
+    const apiUrl = "http://localhost:3030/api/products/"
+    axios.get(apiUrl + prodid)
+      .then(response => {
+        console.log(response.data)
       })
       .catch(err => {
         console.log(err)
@@ -56,7 +68,7 @@ export default function Products() {
       <TableCell>{user.description}</TableCell>
       <TableCell>{user.code}</TableCell>
 
-      <Button variant="contained" style={ViewStyle} className={classes.button}>
+      <Button variant="contained" style={ViewStyle} className={classes.button} onClick={() => prodView(users._id)}>
         View
       </Button>
 

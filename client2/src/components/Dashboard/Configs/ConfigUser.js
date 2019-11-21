@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -8,7 +8,6 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import axios from 'axios'
-const cryptoRandomString = require('crypto-random-string');
 
 const useStyles = makeStyles({
     card: {
@@ -68,7 +67,7 @@ export default function ConfigUser() {
                 <TextField
                     id="standard-full-width"
                     label="Firstname"
-                    // style={{ margin: 8 }}
+                    style={{ margin: 8 }}
                     fullWidth
                     margin="normal"
                     variant="outlined"
@@ -77,7 +76,7 @@ export default function ConfigUser() {
                 <TextField
                     id="standard-full-width"
                     label="Lastname"
-                    // style={{ margin: 8 }}
+                    style={{ margin: 8 }}
                     fullWidth
                     margin="normal"
                     variant="outlined"
@@ -86,7 +85,7 @@ export default function ConfigUser() {
                 <TextField
                     id="standard-full-width"
                     label="Birthdate"
-                    // style={{ margin: 8 }}
+                    style={{ margin: 8 }}
                     fullWidth
                     margin="normal"
                     variant="outlined"
@@ -95,7 +94,7 @@ export default function ConfigUser() {
                 <TextField
                     id="standard-full-width"
                     label="Email"
-                    // style={{ margin: 8 }}
+                    style={{ margin: 8 }}
                     fullWidth
                     margin="normal"
                     variant="outlined"
@@ -104,8 +103,9 @@ export default function ConfigUser() {
                 <TextField
                     id="standard-full-width"
                     label="Password"
-                    // style={{ margin: 8 }}
+                    style={{ margin: 8 }}
                     fullWidth
+                    type="password"
                     margin="normal"
                     variant="outlined"
                     onChange={(event) => setPassword(event.target.value)}
@@ -122,6 +122,10 @@ const submitStyle = {
     float: 'Right',
     margin: '20px'
 }
+
+const formStyle = {
+    margin: '0px 400px'
+  }
 
 const cardStyle = {
     marginLeft: '10px'

@@ -132,7 +132,6 @@ export default function ListItems() {
       </Modal>
 
       <Modal
-        style={userStyle}
         className={classes.modal}
         open={open2}
         onClose={handleCloseUser}
@@ -148,8 +147,4 @@ export default function ListItems() {
       </Modal>
     </div>
   )
-}
-
-const userStyle = {
-  margin: '0px 400px'
 }
