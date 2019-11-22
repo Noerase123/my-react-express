@@ -11,6 +11,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import axios from 'axios'
 
 function Copyright() {
@@ -38,6 +42,16 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  widy: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: theme.palette.secondary.main,
@@ -55,6 +69,8 @@ export default function App() {
   const [emailErr, setEmailErr] = useState('')
   const [pwErr, setPwErr] = useState('')
 
+  const [open, setOpen] = React.useState(false);
+
   const history = useHistory()
 
   const handleSubmit = () => {
@@ -64,10 +80,10 @@ export default function App() {
       "email": email,
       "password": password
     }
-    if (email == "") {
+    if (email === "") {
       setEmailErr("the email is empty")
     }
-    else if (password == "") {
+    else if (password === "") {
       setPwErr("the password is empty")
     }
     else {
@@ -78,6 +94,7 @@ export default function App() {
         })
         .catch(err => {
           console.log(err)
+          handleOpen()
         })
     }
   }
@@ -85,6 +102,15 @@ export default function App() {
   const handlesignup = () => {
     history.push('/signup')
   }
+  
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -148,6 +174,27 @@ export default function App() {
       <Box mt={8}>
         <Copyright />
       </Box>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <div className={classes.widy}>
+            <h2 id="transition-modal-title">
+            <ErrorOutlineIcon/> Error</h2>
+            <h3 id="transition-modal-description">Incorrect Username or Password</h3>
+          </div>
+        </Fade>
+      </Modal>
     </Container>
+
   );
 }

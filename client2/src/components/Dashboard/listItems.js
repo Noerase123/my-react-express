@@ -72,11 +72,11 @@ export default function ListItems() {
           <ListItemText primary="Products" />
         </ListItem>
 
-        <ListItem button onClick={() => history.push('/customers')}>
+        <ListItem button onClick={() => history.push('/users')}>
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
-          <ListItemText primary="Customers" />
+          <ListItemText primary="Users" />
         </ListItem>
 
         <ListItem button>

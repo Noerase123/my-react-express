@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,18 +8,19 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import IconButton from '@material-ui/core/IconButton';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import axios from 'axios'
 
 import ListItems from './listItems';
 import Products from './Products'
@@ -124,6 +125,18 @@ export default function ProductsTab() {
     const history = useHistory()
 
     const [open, setOpen] = React.useState(false);
+    const [showNotif, setShowNotif] = useState([])
+
+    const [notif, setNotif] = useState(null);
+    const openShow = Boolean(notif);
+
+    const handleOpenNotif = event => {
+        setNotif(event.currentTarget)
+    }
+    const handleCloseNotif = () => {
+        setNotif(null)
+    }
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -152,6 +165,26 @@ export default function ProductsTab() {
         history.push('/')
     }
 
+    useEffect(() => {
+        const notifUrl = "http://localhost:3030/api/notif"
+
+        axios.get(notifUrl)
+            .then(res => {
+                console.log(res.data.data)
+                setShowNotif(res.data.data)
+
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }, [])
+
+    const notificate = showNotif.map(notif => (
+        <div>
+          <MenuItem><b>{notif.title}</b></MenuItem>
+        </div>
+      ))
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -169,6 +202,35 @@ export default function ProductsTab() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Products
                     </Typography>
+                    <IconButton
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleOpenNotif}
+                        color="inherit"
+                    >
+                        <Badge badgeContent={notificate.length} color="secondary">
+                            <NotificationsIcon />
+                        </Badge>
+                    </IconButton>
+                    <Menu
+                        id="menu-appbar"
+                        anchorEl={notif}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        keepMounted
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'right',
+                        }}
+                        open={openShow}
+                        onClose={handleCloseNotif}
+                    >
+
+                        {notificate ? notificate : 'No notification available'}
+                    </Menu>
                     <IconButton
                         aria-label="account of current user"
                         aria-controls="menu-appbar"

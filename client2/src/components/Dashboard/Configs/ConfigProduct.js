@@ -44,7 +44,7 @@ export default function ConfigProduct() {
             "description": desc,
             "code": cryptoRandomString({ length: 10 })
         }
-        if (name == "" || price == "" || desc == "") {
+        if (name === "" || price === "" || desc === "") {
             setInc("You have incomplete form")
         } else {
             axios.post(url, payload)

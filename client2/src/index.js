@@ -13,14 +13,12 @@ import App from './App';
 import Dashboard from './components/Dashboard/Dashboard'
 import SignUp from './components/signup'
 import ProductsTab from './components/Dashboard/ProductsTab'
+import UsersTab from './components/Dashboard/UsersTab'
 
 function Routing() {
     return (
         <Router>
             <div>
-
-                {/* A <Switch> looks through its children <Route>s and
-                renders the first one that matches the current URL. */}
                 <Switch>
                     <Route exact path="/">
                         <App />
@@ -33,6 +31,9 @@ function Routing() {
                     </Route>
                     <Route path="/products">
                         <ProductsTab />
+                    </Route>
+                    <Route path="/users">
+                        <UsersTab />
                     </Route>
                 </Switch>
             </div>

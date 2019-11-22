@@ -31,7 +31,6 @@ import TableRow from '@material-ui/core/TableRow';
 import ListItems from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
-import Users from './Users';
 import axios from 'axios'
 
 function Copyright() {
@@ -135,6 +134,7 @@ export default function Dashboard() {
 
   const [open, setOpen] = React.useState(false);
 
+  const [prods, setProds] = useState([])
   const [users, setUsers] = useState([])
   const [showNotif, setShowNotif] = useState([])
 
@@ -182,7 +182,18 @@ export default function Dashboard() {
     axios.get(apiUrl)
       .then(res => {
         console.log(res.data.data)
-        setUsers(res.data.data)
+        setProds(res.data.data)
+
+      })
+      .catch(err => {
+        console.log(err)
+      })
+
+    const usersUrl = "http://localhost:3030/api/users/dashboard"
+    axios.get(usersUrl)
+      .then(res => {
+        console.log(res.data.registered)
+        setUsers(res.data.registered)
 
       })
       .catch(err => {
@@ -202,12 +213,21 @@ export default function Dashboard() {
       })
   }, 1);
 
-  const products = users.map(user => (
+  const products = prods.map(prod => (
+    <TableRow key={prod._id}>
+      <TableCell>{prod.name}</TableCell>
+      <TableCell>{prod.price}</TableCell>
+      <TableCell>{prod.description}</TableCell>
+      <TableCell>{prod.code}</TableCell>
+    </TableRow>
+  ))
+
+  const usage = users.map(user => (
     <TableRow key={user._id}>
-      <TableCell>{user.name}</TableCell>
-      <TableCell>{user.price}</TableCell>
-      <TableCell>{user.description}</TableCell>
-      <TableCell>{user.code}</TableCell>
+      <TableCell>{user.firstname}</TableCell>
+      <TableCell>{user.lastname}</TableCell>
+      <TableCell>{user.birthdate}</TableCell>
+      <TableCell>{user.email}</TableCell>
     </TableRow>
   ))
 
@@ -327,7 +347,25 @@ export default function Dashboard() {
             {/* Recent Users */}
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                <Users />
+                <Title>Registered Users</Title>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Firstname</TableCell>
+                      <TableCell>Lastname</TableCell>
+                      <TableCell>Birthdate</TableCell>
+                      <TableCell>Email</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {usage ? usage : 'No content available'}
+                  </TableBody>
+                </Table>
+                <div className={classes.seeMore}>
+                  <Link color="primary" href="/users">
+                    See more users
+                  </Link>
+                </div>
               </Paper>
             </Grid>
             {/* Recent Products */}
@@ -347,7 +385,7 @@ export default function Dashboard() {
                     {products ? products : 'No content available'}
                   </TableBody>
                 </Table>
-                <div className={classes.seeMore}><br/>
+                <div className={classes.seeMore}><br />
                   <Link color="primary" href="/products">
                     See more products
                   </Link>

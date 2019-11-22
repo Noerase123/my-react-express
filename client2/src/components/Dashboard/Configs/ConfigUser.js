@@ -50,7 +50,7 @@ export default function ConfigUser() {
               console.log(res)
               console.log(res.data)
               alert(res.data.message)
-              history.push('/home')
+              window.location.reload()
           })
           .catch(err => {
               console.log(err)
@@ -89,6 +89,7 @@ export default function ConfigUser() {
                     fullWidth
                     margin="normal"
                     variant="outlined"
+                    type="date"
                     onChange={(event) => setBirthdate(event.target.value)}
                 />
                 <TextField
