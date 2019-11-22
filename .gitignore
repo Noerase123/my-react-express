@@ -5,6 +5,8 @@
 /client2/node_modules
 /.pnp
 .pnp.js
+/client2/.next
+/client2/pages
 
 # testing
 /coverage
