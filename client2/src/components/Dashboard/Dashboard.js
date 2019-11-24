@@ -174,12 +174,20 @@ export default function Dashboard() {
 
   const handlelogout = () => {
     history.push('/')
+    localStorage.removeItem('token')
   }
 
 
   useEffect(() => {
+    const token = localStorage.getItem('token')
+    // console.log(token)
+    const config = {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }
     const apiUrl = "http://localhost:3030/api/products/dashboard"
-    axios.get(apiUrl)
+    axios.get(apiUrl, config)
       .then(res => {
         console.log(res.data.data)
         setProds(res.data.data)
@@ -190,7 +198,7 @@ export default function Dashboard() {
       })
 
     const usersUrl = "http://localhost:3030/api/users/dashboard"
-    axios.get(usersUrl)
+    axios.get(usersUrl, config)
       .then(res => {
         console.log(res.data.registered)
         setUsers(res.data.registered)
@@ -202,7 +210,7 @@ export default function Dashboard() {
 
     const notifUrl = "http://localhost:3030/api/notif"
 
-    axios.get(notifUrl)
+    axios.get(notifUrl, config)
       .then(res => {
         console.log(res.data.data)
         setShowNotif(res.data.data)

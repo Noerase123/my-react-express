@@ -4,15 +4,15 @@ const checkAuth = require('../middleware/check-auth')
 
 const notifController = require('../controllers/notifController')
 
-router.post('/', notifController.createNotif)
+router.post('/', checkAuth, notifController.createNotif)
 
-router.get('/', notifController.viewAllNotif)
+router.get('/', checkAuth, notifController.viewAllNotif)
 
-router.get('/:id', notifController.viewNotif)
+router.get('/:id', checkAuth, notifController.viewNotif)
 
-router.delete('/:id', notifController.deleteNotif)
+router.delete('/:id', checkAuth, notifController.deleteNotif)
 
-router.patch('/:id', notifController.updateNotif)
+router.patch('/:id', checkAuth, notifController.updateNotif)
 
 
 module.exports = router

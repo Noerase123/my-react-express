@@ -9,7 +9,7 @@ exports.loginUser = (req, res) => {
         .then(user => {
             if (user.length < 1) {
                 return res.status(401).json({
-                    message: 'Auth failed'
+                    message: 'Existed'
                 })
             }
             bcrypt.compare(req.body.password, user[0].password, (err, result) => {

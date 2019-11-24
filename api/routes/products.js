@@ -4,16 +4,16 @@ const checkAuth = require('../middleware/check-auth')
 
 const productController = require('../controllers/productController')
 
-router.post('/', productController.createProduct)
+router.post('/', checkAuth, productController.createProduct)
 
-router.get('/', productController.viewAllProducts)
+router.get('/', checkAuth, productController.viewAllProducts)
 
-router.get('/dashboard', productController.viewAllProductsInDashBoard)
+router.get('/dashboard', checkAuth, productController.viewAllProductsInDashBoard)
 
-router.get('/:id', productController.viewProduct)
+router.get('/:id', checkAuth, productController.viewProduct)
 
-router.delete('/:id', productController.deleteProduct)
+router.delete('/:id', checkAuth, productController.deleteProduct)
 
-router.patch('/:id', productController.updateProduct)
+router.patch('/:id', checkAuth, productController.updateProduct)
 
 module.exports = router

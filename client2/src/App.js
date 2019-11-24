@@ -15,6 +15,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import axios from 'axios'
 
 function Copyright() {
@@ -70,12 +71,13 @@ export default function App() {
   const [pwErr, setPwErr] = useState('')
 
   const [open, setOpen] = React.useState(false);
+  const [icon, setIcon] = useState(false)
 
   const history = useHistory()
 
   const handleSubmit = () => {
     const apiUrl = 'http://localhost:3030/api/'
-    console.log("values", email, password)
+    // console.log("values", email, password)
     const payload = {
       "email": email,
       "password": password
@@ -89,8 +91,14 @@ export default function App() {
     else {
       axios.post(apiUrl + 'users/login', payload)
         .then(response => {
-          console.log(response)
-          history.push('/home')
+          // console.log(response)
+          localStorage.setItem("token", response.data.token)
+          if (response.data.token !== "") {
+            setIcon(true)
+            setTimeout(() => {
+              history.push('/home')
+            }, 2000);
+          }
         })
         .catch(err => {
           console.log(err)
@@ -99,10 +107,20 @@ export default function App() {
     }
   }
 
+  const iconic = () => {
+    if (icon == 1) {
+      return (
+        <CircularProgress />
+      )
+    } else {
+      return
+    }
+  }
+
   const handlesignup = () => {
     history.push('/signup')
   }
-  
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -158,6 +176,7 @@ export default function App() {
         >
           Sign In
           </Button>
+        {iconic}
         <Grid container>
           <Grid item xs>
             <Link href="#" variant="body2">
@@ -189,7 +208,7 @@ export default function App() {
         <Fade in={open}>
           <div className={classes.widy}>
             <h2 id="transition-modal-title">
-            <ErrorOutlineIcon/> Error</h2>
+              <ErrorOutlineIcon /> Error</h2>
             <h3 id="transition-modal-description">Incorrect Username or Password</h3>
           </div>
         </Fade>

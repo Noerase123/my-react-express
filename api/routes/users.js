@@ -10,13 +10,13 @@ router.post('/', usersController.signupUser)
 
 router.get('/', usersController.viewAllUsers)
 
-router.get('/dashboard', usersController.viewAllUsersInDashboard)
+router.get('/dashboard', checkAuth, usersController.viewAllUsersInDashboard)
 
-router.get('/:id', usersController.viewUser)
+router.get('/:id', checkAuth, usersController.viewUser)
 
-router.delete('/:id', usersController.deleteUser)
+router.delete('/:id', checkAuth, usersController.deleteUser)
 
-router.patch('/:id', usersController.updateUser)
+router.patch('/:id', checkAuth, usersController.updateUser)
 
 
 module.exports = router

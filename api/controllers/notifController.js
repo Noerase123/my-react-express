@@ -15,7 +15,7 @@ exports.createNotif = (req,res) => {
                 message: 'Product created!',
                 data: {
                     _id: response._id,
-                    title: response.title,
+                    title: response.title, 
                     time: response.time,
                     image: response.image,
                     description: response.description,
