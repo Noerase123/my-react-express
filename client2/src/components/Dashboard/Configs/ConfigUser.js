@@ -36,25 +36,33 @@ export default function ConfigUser() {
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
 
+    const token = localStorage.getItem('token')
+
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
     const handleSubmit = () => {
         const apiUrl = 'http://localhost:3030/api/'
         const payload = {
-            "firstname" : firstname,
-            "lastname" : lastname,
-            "birthdate" : birthdate,
-            "email" : email,
-            "password" : password
+            "firstname": firstname,
+            "lastname": lastname,
+            "birthdate": birthdate,
+            "email": email,
+            "password": password
         }
-        axios.post(apiUrl + 'users/', payload)
-          .then(res => {
-              console.log(res)
-              console.log(res.data)
-              alert(res.data.message)
-              window.location.reload()
-          })
-          .catch(err => {
-              console.log(err)
-          })
+        axios.post(apiUrl + 'users/', payload, config)
+            .then(res => {
+                // console.log(res)
+                // console.log(res.data)
+                alert(res.data.message)
+                window.location.reload()
+            })
+            .catch(err => {
+                console.log(err)
+            })
     }
 
     return (
@@ -126,7 +134,7 @@ const submitStyle = {
 
 const formStyle = {
     margin: '0px 400px'
-  }
+}
 
 const cardStyle = {
     marginLeft: '10px'

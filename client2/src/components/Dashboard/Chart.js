@@ -1,6 +1,7 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
 import Title from './Title';
+import Axios from 'axios';
 
 // Generate Sales Data
 function createData(time, amount) {
@@ -8,18 +9,22 @@ function createData(time, amount) {
 }
 
 const data = [
-  createData('00:00', 0),
-  createData('03:00', 300),
-  createData('06:00', 600),
-  createData('09:00', 800),
-  createData('12:00', 1500),
-  createData('15:00', 2000),
-  createData('18:00', 2400),
-  createData('21:00', 2400),
-  createData('24:00', 650),
+  createData('1/2/19', 3500),
+  createData('2/2/19', 300),
+  createData('3/2/19', 20000),
+  createData('4/2/19', 800),
+  createData('5/2/19', 10500),
+  createData('6/2/19', 2000),
+  createData('7/2/19', 3500),
+  createData('8/2/19', 300),
+  createData('9/2/19', 300),
+  createData('10/2/19', 800),
+  createData('11/2/19', 10500),
+  createData('12/2/19', 2000)
 ];
 
 export default function Chart() {
+  
   return (
     <React.Fragment>
       <Title>Today</Title>

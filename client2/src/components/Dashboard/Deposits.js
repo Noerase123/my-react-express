@@ -4,6 +4,7 @@ import Link from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Title from './Title';
+import Axios from 'axios';
 
 const useStyles = makeStyles({
   depositContext: {
@@ -14,17 +15,35 @@ const useStyles = makeStyles({
 export default function Deposits() {
   const classes = useStyles();
   const history = useHistory()
+  
+  const [deps, setDeps] = React.useState(0)
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('token')
+    Axios.get('http://localhost:3030/api/products/sumprice', {
+      headers: {
+        'Authorization' : `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        console.log(res.data.sum)
+        setDeps(res.data.sum)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
   return (
     <React.Fragment>
-      <Title>Recent Deposits</Title>
+      <Title>Total Revenue</Title>
       <Typography component="p" variant="h4">
-        $3,024.00
+        ${deps}
       </Typography>
       <Typography color="textSecondary" className={classes.depositContext}>
-        on 15 March, 2019
+        as of 15 March, 2019
       </Typography>
       <div>
-        <Link color="primary" href="javascript:;" onClick={()=> history.push('/')}>
+        <Link color="primary" href="javascript:;" onClick={() => history.push('/home')}>
           View balance
         </Link>
       </div>

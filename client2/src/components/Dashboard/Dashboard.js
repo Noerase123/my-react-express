@@ -21,6 +21,10 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Title from './Title';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -86,6 +90,16 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  widy: {
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
+  },
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   drawerPaper: {
     position: 'relative',
     whiteSpace: 'nowrap',
@@ -137,6 +151,7 @@ export default function Dashboard() {
   const [prods, setProds] = useState([])
   const [users, setUsers] = useState([])
   const [showNotif, setShowNotif] = useState([])
+  const [openin, setOpenin] = React.useState(false);
 
   const [auth, setAuth] = useState(true);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -172,9 +187,21 @@ export default function Dashboard() {
     setAnchorEl(null);
   };
 
+  const handleOpenin = () => {
+    setOpenin(true);
+  };
+
+  const handleClosein = () => {
+    setOpenin(false);
+  };
+
   const handlelogout = () => {
-    history.push('/')
-    localStorage.removeItem('token')
+    handleOpenin()
+    setTimeout(() => {
+      history.push('/')
+      localStorage.removeItem('token')
+      handleClosein()
+    }, 1000);
   }
 
 
@@ -189,7 +216,7 @@ export default function Dashboard() {
     const apiUrl = "http://localhost:3030/api/products/dashboard"
     axios.get(apiUrl, config)
       .then(res => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         setProds(res.data.data)
 
       })
@@ -200,7 +227,7 @@ export default function Dashboard() {
     const usersUrl = "http://localhost:3030/api/users/dashboard"
     axios.get(usersUrl, config)
       .then(res => {
-        console.log(res.data.registered)
+        // console.log(res.data.registered)
         setUsers(res.data.registered)
 
       })
@@ -212,7 +239,7 @@ export default function Dashboard() {
 
     axios.get(notifUrl, config)
       .then(res => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         setShowNotif(res.data.data)
 
       })
@@ -403,6 +430,25 @@ export default function Dashboard() {
           </Grid>
         </Container>
         <Copyright />
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          className={classes.modal}
+          open={openin}
+          onClose={handleClosein}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500,
+          }}
+        >
+          <Fade in={openin}>
+            <div className={classes.widy}>
+              <center><CircularProgress /></center>
+              <h3 id="transition-modal-description">Logging out...</h3>
+            </div>
+          </Fade>
+        </Modal>
       </main>
     </div>
   );

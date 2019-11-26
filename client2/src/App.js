@@ -71,7 +71,7 @@ export default function App() {
   const [pwErr, setPwErr] = useState('')
 
   const [open, setOpen] = React.useState(false);
-  const [icon, setIcon] = useState(false)
+  const [openin, setOpenin] = React.useState(false);
 
   const history = useHistory()
 
@@ -93,8 +93,9 @@ export default function App() {
         .then(response => {
           // console.log(response)
           localStorage.setItem("token", response.data.token)
+          handleOpenin()
           if (response.data.token !== "") {
-            setIcon(true)
+
             setTimeout(() => {
               history.push('/home')
             }, 2000);
@@ -102,18 +103,12 @@ export default function App() {
         })
         .catch(err => {
           console.log(err)
-          handleOpen()
-        })
-    }
-  }
+          handleOpenin()
 
-  const iconic = () => {
-    if (icon == 1) {
-      return (
-        <CircularProgress />
-      )
-    } else {
-      return
+          setTimeout(() => {
+            handleOpen()
+          }, 1000);
+        })
     }
   }
 
@@ -127,6 +122,15 @@ export default function App() {
 
   const handleClose = () => {
     setOpen(false);
+    setOpenin(false);
+  };
+
+  const handleOpenin = () => {
+    setOpenin(true);
+  };
+
+  const handleClosein = () => {
+    setOpenin(false);
   };
 
 
@@ -176,7 +180,6 @@ export default function App() {
         >
           Sign In
           </Button>
-        {iconic}
         <Grid container>
           <Grid item xs>
             <Link href="#" variant="body2">
@@ -209,10 +212,31 @@ export default function App() {
           <div className={classes.widy}>
             <h2 id="transition-modal-title">
               <ErrorOutlineIcon /> Error</h2>
-            <h3 id="transition-modal-description">Incorrect Username or Password</h3>
+            <h3 id="transition-modal-description" style={{color: 'red'}}>Incorrect Username or Password</h3>
           </div>
         </Fade>
       </Modal>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={openin}
+        onClose={handleClosein}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={openin}>
+          <div className={classes.widy}>
+            <center><CircularProgress /></center>
+            <h3 id="transition-modal-description">Logging in...</h3>
+          </div>
+        </Fade>
+      </Modal>
+
     </Container>
 
   );

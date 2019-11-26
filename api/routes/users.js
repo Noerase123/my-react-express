@@ -8,7 +8,7 @@ router.post('/login', usersController.loginUser)
 
 router.post('/', usersController.signupUser)
 
-router.get('/', usersController.viewAllUsers)
+router.get('/', checkAuth, usersController.viewAllUsers)
 
 router.get('/dashboard', checkAuth, usersController.viewAllUsersInDashboard)
 

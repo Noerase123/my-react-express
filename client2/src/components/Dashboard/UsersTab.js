@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom'
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,6 +19,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MenuItem from '@material-ui/core/MenuItem';
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Menu from '@material-ui/core/Menu';
 import axios from 'axios'
 import ListItems from './listItems';
@@ -163,13 +164,17 @@ export default function UsersTab() {
     const handlelogout = () => {
         history.push('/')
     }
-    
+
     useEffect(() => {
         const notifUrl = "http://localhost:3030/api/notif"
-
-        axios.get(notifUrl)
+        const token = localStorage.getItem('token')
+        axios.get(notifUrl, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(res => {
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 setShowNotif(res.data.data)
 
             })
@@ -180,9 +185,9 @@ export default function UsersTab() {
 
     const notificate = showNotif.map(notif => (
         <div>
-          <MenuItem><b>{notif.title}</b></MenuItem>
+            <MenuItem><b>{notif.title}</b></MenuItem>
         </div>
-      ))
+    ))
 
     return (
         <div className={classes.root}>
@@ -279,6 +284,14 @@ export default function UsersTab() {
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Breadcrumbs aria-label="breadcrumb">
+                                <Link color="inherit" onClick={() => history.push('/home')}>
+                                    Dashboard
+                                </Link>
+                                <Typography color="textPrimary">Users</Typography>
+                            </Breadcrumbs>
+                        </Grid>
                         <Grid item xs={12}>
                             <AddUserModal />
                         </Grid>

@@ -36,6 +36,14 @@ export default function ConfigProduct() {
     const [desc, setDesc] = useState('')
     const [inc, setInc] = useState('')
 
+    const token = localStorage.getItem('token')
+
+    const config = {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    }
+
     const addProduct = () => {
         const url = 'http://localhost:3030/api/products/'
         const payload = {
@@ -47,9 +55,9 @@ export default function ConfigProduct() {
         if (name === "" || price === "" || desc === "") {
             setInc("You have incomplete form")
         } else {
-            axios.post(url, payload)
+            axios.post(url, payload, config)
                 .then(res => {
-                    console.log(res.data)
+                    // console.log(res.data)
                     window.location.reload()
                 })
                 .catch(err => {
@@ -65,7 +73,7 @@ export default function ConfigProduct() {
                     Add Product
                 </Typography>
 
-                <h2 style={{color:"red"}}>{inc}</h2>
+                <h2 style={{ color: "red" }}>{inc}</h2>
 
                 <TextField
                     id="standard-full-width"

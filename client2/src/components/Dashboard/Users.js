@@ -39,7 +39,6 @@ export default function Users() {
 
   const [user, setUser] = useState([])
   const [view, setView] = useState({})
-  const [update, setUpdate] = useState({})
   const [open, setOpen] = useState(false);
   const [openupdate, setOpenupdate] = useState(false);
   const [updateid, setUpdateid] = useState('')
@@ -64,11 +63,19 @@ export default function Users() {
     return birthdate.slice(0, 10)
   }
 
+  const token = localStorage.getItem('token')
+
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }
+
   useEffect(() => {
     const apiUrl = "http://localhost:3030/api/users/"
-    axios.get(apiUrl)
+    axios.get(apiUrl, config)
       .then(res => {
-        console.log(res.data.registered)
+        // console.log(res.data.registered)
         setUser(res.data.registered)
       })
       .catch(err => {
@@ -79,7 +86,7 @@ export default function Users() {
   const prodDelete = (prodid) => {
     const apiUrl = "http://localhost:3030/api/users/"
     if (window.confirm('Are you sure?')) {
-      axios.delete(apiUrl + prodid)
+      axios.delete(apiUrl + prodid, config)
         .then(res => {
           window.location.reload()
         })
@@ -91,9 +98,9 @@ export default function Users() {
 
   const prodView = (prodid) => {
     const apiUrl = "http://localhost:3030/api/users/"
-    axios.get(apiUrl + prodid)
+    axios.get(apiUrl + prodid, config)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         setView(response.data)
         setOpen(true)
       })
@@ -124,9 +131,9 @@ export default function Users() {
 
     ]
 
-    axios.patch(apiUrl + updateid, payload)
+    axios.patch(apiUrl + updateid, payload, config)
       .then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         alert(res.data.message)
         window.location.reload()
       })
@@ -140,9 +147,9 @@ export default function Users() {
     setUpdateid(updateid);
 
     const apiUrl = "http://localhost:3030/api/users/"
-    axios.get(apiUrl + updateid)
+    axios.get(apiUrl + updateid, config)
       .then(response => {
-        console.log(response.data)
+        // console.log(response.data)
         setOpenupdate(true);
         setFirstname(response.data.firstname)
         setLastname(response.data.lastname)
@@ -245,7 +252,7 @@ export default function Users() {
           }}
         >
           <Fade in={open}>
-            <div className={classes.paper}>
+            <div className={classes.paper} key={view._id}>
               <h2>User Details</h2>
               <p style={pStyle}><b>Firstname :</b> {view.firstname}</p>
               <p style={pStyle}><b>Lastname :</b> {view.lastname}</p>
@@ -286,7 +293,7 @@ export default function Users() {
       {PView()}
       {PUpdate()}
 
-      <Title>Products</Title>
+      <Title>Users</Title>
       <Table size="small">
         <TableHead>
           <TableRow>

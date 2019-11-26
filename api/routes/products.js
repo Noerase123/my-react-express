@@ -6,7 +6,9 @@ const productController = require('../controllers/productController')
 
 router.post('/', checkAuth, productController.createProduct)
 
-router.get('/', checkAuth, productController.viewAllProducts)
+router.get('/', productController.viewAllProducts)
+
+router.get('/sumprice', checkAuth, productController.sumprice)
 
 router.get('/dashboard', checkAuth, productController.viewAllProductsInDashBoard)
 

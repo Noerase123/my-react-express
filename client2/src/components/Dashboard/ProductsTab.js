@@ -22,6 +22,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import axios from 'axios'
 
+import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import ListItems from './listItems';
 import Products from './Products'
 import AddProductModal from './Configs/AddProductModal'
@@ -143,15 +144,10 @@ export default function ProductsTab() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-    const [auth, setAuth] = React.useState(true);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const opened = Boolean(anchorEl);
 
-    const handleChange = event => {
-        setAuth(event.target.checked);
-    };
 
     const handleMenu = event => {
         setAnchorEl(event.currentTarget);
@@ -167,10 +163,14 @@ export default function ProductsTab() {
 
     useEffect(() => {
         const notifUrl = "http://localhost:3030/api/notif"
-
-        axios.get(notifUrl)
+        const token = localStorage.getItem('token')
+        axios.get(notifUrl, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(res => {
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 setShowNotif(res.data.data)
 
             })
@@ -181,9 +181,9 @@ export default function ProductsTab() {
 
     const notificate = showNotif.map(notif => (
         <div>
-          <MenuItem><b>{notif.title}</b></MenuItem>
+            <MenuItem><b>{notif.title}</b></MenuItem>
         </div>
-      ))
+    ))
 
     return (
         <div className={classes.root}>
@@ -280,6 +280,14 @@ export default function ProductsTab() {
                 <div className={classes.appBarSpacer} />
                 <Container maxWidth="lg" className={classes.container}>
                     <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                            <Breadcrumbs aria-label="breadcrumb">
+                                <Link color="inherit" onClick={() => history.push('/home')}>
+                                    Dashboard
+                                </Link>
+                                <Typography color="textPrimary">Products</Typography>
+                            </Breadcrumbs>
+                        </Grid>
                         <Grid item xs={12}>
                             <AddProductModal />
                         </Grid>

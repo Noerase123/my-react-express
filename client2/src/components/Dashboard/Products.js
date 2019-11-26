@@ -55,9 +55,17 @@ export default function Products() {
     setOpenupdate(false);
   };
 
+  const token = localStorage.getItem('token')
+
+  const config = {
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  }
+
   useEffect(() => {
     const apiUrl = "http://localhost:3030/api/products/"
-    axios.get(apiUrl)
+    axios.get(apiUrl, config)
       .then(res => {
         setProd(res.data.data)
       })
@@ -69,7 +77,7 @@ export default function Products() {
   const prodDelete = (prodid) => {
     const apiUrl = "http://localhost:3030/api/products/"
     if (window.confirm('Are you sure?')) {
-      axios.delete(apiUrl + prodid)
+      axios.delete(apiUrl + prodid, config)
         .then(res => {
         })
         .catch(err => {
@@ -80,7 +88,7 @@ export default function Products() {
 
   const prodView = (prodid) => {
     const apiUrl = "http://localhost:3030/api/products/"
-    axios.get(apiUrl + prodid)
+    axios.get(apiUrl + prodid, config)
       .then(response => {
         setView(response.data)
         setOpen(true)
@@ -108,7 +116,7 @@ export default function Products() {
 
     ]
 
-    axios.patch(apiUrl + updateid, payload)
+    axios.patch(apiUrl + updateid, payload, config)
       .then(res => {
         alert(res.data.message)
         window.location.reload()
@@ -123,7 +131,7 @@ export default function Products() {
     setUpdateid(updateid);
 
     const apiUrl = "http://localhost:3030/api/products/"
-    axios.get(apiUrl + updateid)
+    axios.get(apiUrl + updateid,config)
       .then(response => {
         setOpenupdate(true);
         setName(response.data.name)
