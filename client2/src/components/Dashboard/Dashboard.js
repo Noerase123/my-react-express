@@ -204,6 +204,11 @@ export default function Dashboard() {
     }, 1000);
   }
 
+  const handleClickNotif = (notifid) => {
+    console.log(notifid)
+    history.push(`/notif/${notifid}`)
+  }
+
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -268,7 +273,7 @@ export default function Dashboard() {
 
   const notificate = showNotif.map(notif => (
     <div>
-      <MenuItem><b>{notif.title}</b></MenuItem>
+      <MenuItem onClick={() => handleClickNotif(notif._id)}><b>{notif.title}</b></MenuItem>
     </div>
   ))
 
@@ -316,7 +321,7 @@ export default function Dashboard() {
             onClose={handleCloseNotif}
           >
 
-            {notificate ? notificate : 'No notification available'}
+            {notificate.length !== 0 ? notificate : <MenuItem>No Notification</MenuItem>}
           </Menu>
           <IconButton
             aria-label="account of current user"

@@ -14,6 +14,7 @@ import Dashboard from './components/Dashboard/Dashboard'
 import SignUp from './components/signup'
 import ProductsTab from './components/Dashboard/ProductsTab'
 import UsersTab from './components/Dashboard/UsersTab'
+import NotifTab from './components/Dashboard/notif/NotifTab';
 
 function Routing() {
 
@@ -35,6 +36,9 @@ function Routing() {
                     </Route>
                     <Route path="/users">
                         <UsersTab />
+                    </Route>
+                    <Route path="/notif">
+                        <NotifTab />
                     </Route>
                 </Switch>
             </div>

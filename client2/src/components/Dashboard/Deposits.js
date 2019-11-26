@@ -26,7 +26,7 @@ export default function Deposits() {
       }
     })
       .then(res => {
-        console.log(res.data.sum)
+        // console.log(res.data.sum)
         setDeps(res.data.sum)
       })
       .catch(err => {

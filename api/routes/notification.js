@@ -4,7 +4,7 @@ const checkAuth = require('../middleware/check-auth')
 
 const notifController = require('../controllers/notifController')
 
-router.post('/', checkAuth, notifController.createNotif)
+router.post('/', notifController.createNotif)
 
 router.get('/', checkAuth, notifController.viewAllNotif)
 
