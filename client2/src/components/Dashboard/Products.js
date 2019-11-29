@@ -230,11 +230,11 @@ export default function Products() {
           <Fade in={open}>
             <div className={classes.paper}>
               <h2>Product Details</h2>
+              <a href={'http://localhost:3030/' + view.productImage}><img style={imageStyle} src={'http://localhost:3030/'+view.productImage}/></a>
               <p style={pStyle}><b>Name :</b> {view.name}</p>
               <p style={pStyle}><b>Price :</b> {view.price}</p>
               <p style={pStyle}><b>Description :</b> {view.description}</p>
               <p style={pStyle}><b>Code :</b> {view.code}</p>
-              <p style={pStyle}><b>Image :</b></p> <a href={'http://localhost:3030/' + view.productImage}><img style={imageStyle} src={'http://localhost:3030/'+view.productImage}/></a>
             </div>
           </Fade>
         </Modal>
@@ -246,7 +246,7 @@ export default function Products() {
     <TableRow key={user._id}>
       <TableCell>{user.name}</TableCell>
       <TableCell>{user.price}</TableCell>
-      <TableCell><Button onClick={() => console.log(user._id)}><img src={'http://localhost:3030/' + user.productImage} style={imageStyle} /></Button></TableCell>
+      <TableCell><Button onClick={() => console.log(user._id)}><img src={'http://localhost:3030/' + user.productImage} style={imagePreview} /></Button></TableCell>
       <TableCell>{user.description}</TableCell>
       <TableCell>{user.code}</TableCell>
 
@@ -308,6 +308,11 @@ const pStyle = {
 }
 
 const imageStyle = {
+  height: '250px',
+  width: '250px'
+}
+
+const imagePreview = {
   height: '100px',
   width: '100px'
 }
