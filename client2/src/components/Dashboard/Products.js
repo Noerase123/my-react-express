@@ -37,9 +37,9 @@ const useStyles = makeStyles(theme => ({
 export default function Products() {
   const classes = useStyles();
 
+  const [image, setImage] = useState('')
   const [prod, setProd] = useState([])
   const [view, setView] = useState({})
-  const [update, setUpdate] = useState({})
   const [open, setOpen] = useState(false);
   const [openupdate, setOpenupdate] = useState(false);
   const [updateid, setUpdateid] = useState('')
@@ -72,6 +72,7 @@ export default function Products() {
       .catch(err => {
         console.log(err)
       })
+
   }, []);
 
   const prodDelete = (prodid) => {
@@ -79,6 +80,7 @@ export default function Products() {
     if (window.confirm('Are you sure?')) {
       axios.delete(apiUrl + prodid, config)
         .then(res => {
+          window.location.reload()
         })
         .catch(err => {
           console.log(err)
@@ -131,7 +133,7 @@ export default function Products() {
     setUpdateid(updateid);
 
     const apiUrl = "http://localhost:3030/api/products/"
-    axios.get(apiUrl + updateid,config)
+    axios.get(apiUrl + updateid, config)
       .then(response => {
         setOpenupdate(true);
         setName(response.data.name)
@@ -232,6 +234,7 @@ export default function Products() {
               <p style={pStyle}><b>Price :</b> {view.price}</p>
               <p style={pStyle}><b>Description :</b> {view.description}</p>
               <p style={pStyle}><b>Code :</b> {view.code}</p>
+              <p style={pStyle}><b>Image :</b></p> <a href={'http://localhost:3030/' + view.productImage}><img style={imageStyle} src={'http://localhost:3030/'+view.productImage}/></a>
             </div>
           </Fade>
         </Modal>
@@ -243,6 +246,7 @@ export default function Products() {
     <TableRow key={user._id}>
       <TableCell>{user.name}</TableCell>
       <TableCell>{user.price}</TableCell>
+      <TableCell><Button onClick={() => console.log(user._id)}><img src={'http://localhost:3030/' + user.productImage} style={imageStyle} /></Button></TableCell>
       <TableCell>{user.description}</TableCell>
       <TableCell>{user.code}</TableCell>
 
@@ -254,7 +258,7 @@ export default function Products() {
         Edit
       </Button>
 
-      <Button variant="contained" color="secondary" className={classes.button} onClick={() => prodDelete(user._id)}>
+      <Button variant="contained" color="secondary" className={classes.button} onClick={(event) => prodDelete(user._id)}>
         Delete
       </Button>
 
@@ -273,6 +277,7 @@ export default function Products() {
           <TableRow>
             <TableCell>Name</TableCell>
             <TableCell>Price</TableCell>
+            <TableCell>Image</TableCell>
             <TableCell>Description</TableCell>
             <TableCell>Code</TableCell>
             <TableCell>Options</TableCell>
@@ -300,4 +305,9 @@ const ViewStyle = {
 
 const pStyle = {
   fontSize: '18px'
+}
+
+const imageStyle = {
+  height: '100px',
+  width: '100px'
 }

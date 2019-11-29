@@ -2,12 +2,14 @@ const Product = require('../models/ProductModel')
 const mongoose = require('mongoose')
 
 exports.createProduct = (req, res) => {
+    console.log(req.file)
     const prod = new Product({
         _id: mongoose.Types.ObjectId(),
         name: req.body.name,
         price: req.body.price,
         description: req.body.description,
-        code: req.body.code
+        code: req.body.code,
+        productImage: req.file.path
     })
     prod.save()
         .then(response => {
@@ -17,6 +19,7 @@ exports.createProduct = (req, res) => {
                     _id: response._id,
                     name: response.name,
                     price: response.price,
+                    productImage: response.productImage,
                     description: response.description,
                     code: response.code,
                     request: {
@@ -43,6 +46,7 @@ exports.viewAllProducts = (req, res) => {
                         _id: prod._id,
                         name: prod.name,
                         price: prod.price,
+                        productImage: prod.productImage,
                         description: prod.description,
                         code: prod.code,
                         request: {
@@ -96,6 +100,7 @@ exports.viewAllProductsInDashBoard = (req, res) => {
                         _id: prod._id,
                         name: prod.name,
                         price: prod.price,
+                        productImage: prod.productImage,
                         description: prod.description,
                         code: prod.code,
                         request: {
@@ -123,6 +128,7 @@ exports.viewProduct = (req, res) => {
                 _id: response._id,
                 name: response.name,
                 price: response.price,
+                productImage: response.productImage,
                 description: response.description,
                 code: response.code,
                 request: {

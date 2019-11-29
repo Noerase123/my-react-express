@@ -4,11 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import AddIcon from '@material-ui/icons/Add';
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Fab from '@material-ui/core/Fab';
 import axios from 'axios'
-const cryptoRandomString = require('crypto-random-string');
+import cryptoRandomString from 'crypto-random-string';
+import ImageUploader from 'react-images-upload'
 
 const useStyles = makeStyles({
     card: {
@@ -18,6 +20,9 @@ const useStyles = makeStyles({
         display: 'inline-block',
         margin: '0 2px',
         transform: 'scale(0.8)',
+    },
+    input: {
+        display: 'none',
     },
     title: {
         fontSize: 14,
@@ -34,36 +39,48 @@ export default function ConfigProduct() {
     const [name, setName] = useState('')
     const [price, setPrice] = useState(0)
     const [desc, setDesc] = useState('')
+
     const [inc, setInc] = useState('')
+    const [pictures, setPictures] = useState([])
 
     const token = localStorage.getItem('token')
 
     const config = {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            'content-type': 'multipart/form-data'
         }
     }
 
+
+
     const addProduct = () => {
         const url = 'http://localhost:3030/api/products/'
-        const payload = {
-            "name": name,
-            "price": price,
-            "description": desc,
-            "code": cryptoRandomString({ length: 10 })
-        }
+
+        const data = new FormData()
+        data.append('name', name)
+        data.append('price', price)
+        data.append('description', desc)
+        data.append('code', cryptoRandomString({ length: 10 }))
+            data.append('productImage', pictures, pictures.name)
+
         if (name === "" || price === "" || desc === "") {
             setInc("You have incomplete form")
         } else {
-            axios.post(url, payload, config)
+            axios.post(url, data, config)
                 .then(res => {
                     // console.log(res.data)
                     window.location.reload()
                 })
                 .catch(err => {
                     console.log(err)
+                    console.log(pictures)
                 })
         }
+    }
+
+    const onDrop = (picture) => {
+        setPictures(picture[0])
     }
 
     return (
@@ -94,6 +111,17 @@ export default function ConfigProduct() {
                     variant="outlined"
                     onChange={(event) => setPrice(event.target.value)}
 
+                />
+                <ImageUploader
+                    withIcon={false}
+                    withPreview={true}
+                    type="file"
+                    label=""
+                    buttonText="Upload Images"
+                    onChange={onDrop}
+                    imgExtension={[".jpeg", ".jpg", ".gif", ".png", ".gif", ".svg"]}
+                    maxFileSize={1048576}
+                    fileSizeError=" file size is too big"
                 />
                 <TextField
                     id="standard-full-width"
